@@ -88,10 +88,12 @@ export const validateLogin = async (req, res, next) => {
 }
 
 export const loginUser = (req, res) => {
+  console.log("user login works",req.body)
   passport.authenticate(
     "login",
     { session: false },
     async (err, user, info) => {
+      console.log("user",user)
       try {
         if (err) {
           throw err

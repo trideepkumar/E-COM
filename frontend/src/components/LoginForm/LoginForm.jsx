@@ -1,8 +1,10 @@
 import React, { useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 import { Alert, CircularProgress, Slide } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../api/axiosInstance";
@@ -14,8 +16,10 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import Button from "../ui/Button";
 import "../styles/Signup.css";
+import Users from "../../../../server/Model/User";
 
-function SignupForm() {
+function LoginForm() {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -55,15 +59,15 @@ function SignupForm() {
           others: "",
         };
       });
+      console.log(users)
       axiosInstance
-        .post("/api/register", { ...users })
+        .post("/api/login", { ...users })
         .then(({ data }) => {
-          console.log("request sent")
           setLoading(false);
           if (data.success) {
             dispatch(setUser(data.user));
             console.log(data.user);
-            navigate("/login");
+            navigate("/signup");
           }
         })
         .catch((error) => {
@@ -109,55 +113,6 @@ function SignupForm() {
 
   return (
     <Box className="container">
-      <Box className="custom-box">
-        <Typography
-          style={{
-            color: "#FFFFFF",
-            display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-            fontFamily: "Montserrat",
-            fontSize: "56.781px",
-            fontStyle: "normal",
-            fontWeight: "700",
-            lineHeight: "normal",
-          }}
-        >
-          Welcome Back!
-        </Typography>
-        <Typography
-          style={{
-            color: "#FFFFFF",
-            display: "flex",
-            flexDirection: "initial",
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-            fontFamily: "Montserrat",
-            fontSize: "16.207px",
-            fontStyle: "normal",
-            fontWeight: "400",
-            lineHeight: "140.4%",
-          }}
-        >
-          To keep connected with us plase login with your personal info
-        </Typography>
-        <RouterLink to={'/login'}>
-        <Button
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0)",
-            border: "solid",
-            width: "13rem",
-            borderRadius: "43.678px",
-            marginTop:"3rem"
-          }}
-        >
-          SIGN IN
-        </Button>
-        </RouterLink>
-      </Box>
-
       <Box className="form">
         <Box component="form" onSubmit={handleSubmit} noValidate>
           <Typography
@@ -187,32 +142,6 @@ function SignupForm() {
                   </Alert>
                 </Slide>
               )}
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="name"
-                type="text"
-                id="name"
-                autoComplete="name"
-                variant="filled"
-                value={users.name}
-                onChange={handleChange}
-                error={!!error.name}
-                helperText={error.name}
-                style={{ borderBottom: "none", background: "#F4F8F5" }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Person2OutlinedIcon />
-                    </InputAdornment>
-                  ),
-                  placeholder: "Name",
-                }}
-              />
             </Grid>
 
             <Grid item xs={12}>
@@ -283,14 +212,62 @@ function SignupForm() {
             {loading ? (
               <CircularProgress sx={{ color: "white" }} size="1.7rem" />
             ) : (
-              "SIGN UP"
+              "LOG IN"
             )}
           </Button>
         </Box>
       </Box>
 
+      <Box className="custom-box">
+        <Typography
+          style={{
+            color: "#FFFFFF",
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+            fontFamily: "Montserrat",
+            fontSize: "56.781px",
+            fontStyle: "normal",
+            fontWeight: "700",
+            lineHeight: "normal",
+          }}
+        >
+          Welcome Back!
+        </Typography>
+        <Typography
+          style={{
+            color: "#FFFFFF",
+            display: "flex",
+            flexDirection: "initial",
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+            fontFamily: "Montserrat",
+            fontSize: "16.207px",
+            fontStyle: "normal",
+            fontWeight: "400",
+            lineHeight: "140.4%",
+          }}
+        >
+          Enter your personal details and start your journey with us{" "}
+        </Typography>
+        <RouterLink to='/'>
+        <Button
+         style={{
+            backgroundColor: "rgba(0, 0, 0, 0)",
+            border: "solid",
+            width: "13rem",
+            borderRadius: "43.678px",
+            marginTop:"3rem"
+          }}
+        >
+          SIGN UP
+        </Button>
+        </RouterLink>
+      </Box>
     </Box>
   );
 }
 
-export default SignupForm;
+export default LoginForm;
